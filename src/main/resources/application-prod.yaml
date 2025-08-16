@@ -1,21 +1,3 @@
-server:
-  port: 8090
 
-spring:
-  mail:
-    host: smtp.gmail.com  # Use your SMTP server (e.g., SendGrid, Amazon SES)
-    port: 587
-    username: ${EMAIL_USERNAME}
-    password: ${EMAIL_PASSWORD.key}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
 
-app:
-  backend-base-url: http://localhost:8080
+
