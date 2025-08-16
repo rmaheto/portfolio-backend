@@ -1,0 +1,28 @@
+server:
+  port: 8090
+
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD.key}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+contact:
+  to: rmkaheto4java@gmail.com
+
+recaptcha:
+  secretKey: ${GOOGLE_RECAPTCHA_SECRET.key}
+  verifyUrl: https://www.google.com/recaptcha/api/siteverify
+
+app:
+  backend-base-url: http://localhost:8080
