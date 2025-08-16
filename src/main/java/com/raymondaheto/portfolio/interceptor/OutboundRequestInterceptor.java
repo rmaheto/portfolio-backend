@@ -15,7 +15,9 @@ public class OutboundRequestInterceptor implements ClientHttpRequestInterceptor 
 
   @Override
   public ClientHttpResponse intercept(
-      final HttpRequest request,@Nonnull final byte[] body, final ClientHttpRequestExecution execution)
+      final HttpRequest request,
+      @Nonnull final byte[] body,
+      final ClientHttpRequestExecution execution)
       throws IOException {
     final HttpHeaders headers = request.getHeaders();
 

@@ -14,14 +14,14 @@ public class WebConfig {
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(@Nonnull final CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry
+            .addMapping("/**")
             .allowedOrigins(
                 "http://localhost:4200",
                 "http://127.0.0.1:8080",
                 "https://raymond-aheto.com",
                 "https://www.raymond-aheto.com",
-                "https://api.raymondaheto.com"
-            )
+                "https://api.raymondaheto.com")
             .allowedMethods("POST", "OPTIONS")
             .allowedHeaders("*")
             .exposedHeaders("Authorization", "Content-Type")
@@ -30,4 +30,3 @@ public class WebConfig {
     };
   }
 }
-

@@ -1,9 +1,7 @@
 package com.raymondaheto.portfolio.config;
 
-
 import com.raymondaheto.portfolio.exception.PropertyEncryptionException;
 import com.raymondaheto.portfolio.util.EncryptionUtil;
-
 import jakarta.annotation.Nonnull;
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,7 +71,8 @@ class ExternalPropertiesConfig {
   /** Construct the external properties file path */
   private static String getExternalFilePath(@Nonnull final String activeProfile) {
     return Paths.get(
-            File.separator + "keys", "raymondaheto_portfolio_credentials_" + activeProfile + ".properties")
+            File.separator + "keys",
+            "raymondaheto_portfolio_credentials_" + activeProfile + ".properties")
         .toAbsolutePath()
         .toString();
   }

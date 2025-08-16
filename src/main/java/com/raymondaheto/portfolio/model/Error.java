@@ -1,7 +1,6 @@
 package com.raymondaheto.portfolio.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -20,20 +19,17 @@ public class Error implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @NotNull
-  private String code;
+  @NotNull private String code;
 
   @NotNull
   @Pattern(regexp = "^[a-z]{3}-[A-Z]{3}$")
   private String locale;
 
-  @NotNull
-  private String localizedMessage;
+  @NotNull private String localizedMessage;
 
   private List<String> paths;
 
-  @NotNull
-  private Severity severity;
+  @NotNull private Severity severity;
 
   private String supportInformation;
 

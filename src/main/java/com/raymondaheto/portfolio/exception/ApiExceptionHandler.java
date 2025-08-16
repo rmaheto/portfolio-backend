@@ -2,7 +2,6 @@ package com.raymondaheto.portfolio.exception;
 
 import com.raymondaheto.portfolio.model.Error;
 import com.raymondaheto.portfolio.model.Errors;
-
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class ApiExceptionHandler {
 
-
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<Errors> handleIllegalArgument(final IllegalArgumentException ex) {
     return build(HttpStatus.BAD_REQUEST, "INVALID_REQUEST", ex.getMessage(), null);
@@ -25,7 +23,6 @@ public class ApiExceptionHandler {
   public ResponseEntity<Errors> handleInternalServerException(final InternalServerException ex) {
     return build(HttpStatus.INTERNAL_SERVER_ERROR, "GENERIC_ERROR", ex.getMessage(), null);
   }
-
 
   @ExceptionHandler(RecaptchaException.class)
   public ResponseEntity<Errors> handleRecaptchaException(final RecaptchaException ex) {
@@ -62,4 +59,3 @@ public class ApiExceptionHandler {
     return ResponseEntity.status(status).body(errors);
   }
 }
-

@@ -1,6 +1,5 @@
 package com.raymondaheto.portfolio.controller;
 
-
 import com.raymondaheto.portfolio.dto.ApiResponse;
 import com.raymondaheto.portfolio.exception.RecaptchaException;
 import com.raymondaheto.portfolio.model.ContactRequest;
@@ -33,15 +32,16 @@ public class ContactController {
       throw new RecaptchaException("RECAPTCHA_INVALID");
     }
 
-    final var body = """
+    final var body =
+        """
         From: %s <%s>
         Subject: %s
-        
+
         %s
-        """.formatted(req.name(), req.email(), req.subject(), req.message());
+        """
+            .formatted(req.name(), req.email(), req.subject(), req.message());
 
     mail.sendContact(toEmail, req.email(), req.subject(), body);
     return ResponseEntity.accepted().build();
   }
 }
-
