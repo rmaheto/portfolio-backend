@@ -1,4 +1,3 @@
-
 package com.raymondaheto.portfolio.service;
 
 import com.raymondaheto.portfolio.model.ContactRequest;
@@ -13,14 +12,15 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EmailService {
   private final JavaMailSender mailSender;
   private final TemplateEngine templateEngine;
-  @Value("${contact.to}") private String ownerEmail;
+
+  @Value("${contact.to}")
+  private String ownerEmail;
 
   public void sendOwnerNotification(final ContactRequest req) {
     final String subject = "New contact message: " + safe(req.subject());
@@ -63,5 +63,8 @@ public class EmailService {
     if (name == null || name.isBlank()) return "there";
     return name.trim().split("\\s+")[0];
   }
-  private static String safe(final String s) { return s == null ? "" : s; }
+
+  private static String safe(final String s) {
+    return s == null ? "" : s;
+  }
 }

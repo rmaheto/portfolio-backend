@@ -22,7 +22,6 @@ public class ContactController {
   @Value("${contact.to}")
   String toEmail;
 
-
   @PostMapping
   public ResponseEntity<ApiResponse<Void>> submit(@Valid @RequestBody final ContactRequest req) {
 
