@@ -4,26 +4,24 @@ import com.raymondaheto.portfolio.dto.ApiResponse;
 import com.raymondaheto.portfolio.exception.RecaptchaException;
 import com.raymondaheto.portfolio.model.ContactRequest;
 import com.raymondaheto.portfolio.service.CaptchaService;
-import com.raymondaheto.portfolio.service.MailService;
+import com.raymondaheto.portfolio.service.EmailService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/contact")
+@RequiredArgsConstructor
 public class ContactController {
 
-  private final MailService mail;
+  private final EmailService emailService;
   private final CaptchaService captcha;
 
   @Value("${contact.to}")
   String toEmail;
 
-  public ContactController(final MailService mail, final CaptchaService captcha) {
-    this.mail = mail;
-    this.captcha = captcha;
-  }
 
   @PostMapping
   public ResponseEntity<ApiResponse<Void>> submit(@Valid @RequestBody final ContactRequest req) {
@@ -32,16 +30,8 @@ public class ContactController {
       throw new RecaptchaException("RECAPTCHA_INVALID");
     }
 
-    final var body =
-        """
-        From: %s <%s>
-        Subject: %s
-
-        %s
-        """
-            .formatted(req.name(), req.email(), req.subject(), req.message());
-
-    mail.sendContact(toEmail, req.email(), req.subject(), body);
+    emailService.sendOwnerNotification(req);
+    emailService.sendAutoReply(req);
     return ResponseEntity.accepted().build();
   }
 }
