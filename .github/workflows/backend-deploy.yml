@@ -2,44 +2,44 @@ name: Backend CI/CD (Spring Boot)
 
 on:
   push:
-    branches: [ main ]           # build & deploy on push to main
+    branches: [ main ]            # build & deploy on push to main
   pull_request:
-    branches: [ main ]           # run CI on PRs (no deploy)
+    branches: [ main ]            # run CI on PRs (no deploy)
   workflow_dispatch:
 
 concurrency:
   group: backend-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-
 permissions:
   contents: read
 
 jobs:
   # ------------------------------
-  # CI: Install → Format → Test → Package
+  # CI: format → test → package
   # ------------------------------
   ci:
     runs-on: ubuntu-latest
+    env:
+      # Use the default Maven home so setup-java's built-in cache works
+      MAVEN_OPTS: "-Dmaven.repo.local=$HOME/.m2/repository"
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Temurin JDK 17
+      - name: Setup Temurin JDK 17 (with Maven cache)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-          cache: maven
+          cache: maven            # caches $HOME/.m2/repository automatically
 
-      # (Optional) restore/resolve dependencies – mostly covered by maven cache above
+      # (Optional) resolve dependencies up front to warm the cache
       - name: Install/Restore dependencies
         run: mvn -B -q dependency:resolve dependency:resolve-plugins
 
-      # ---- Code format with Spotless (uses google-java-format under the hood) ----
+      # ---- Code format with Spotless (uses google-java-format) ----
       - name: Check code format (Spotless)
         run: mvn -B spotless:check
 
@@ -69,6 +69,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
+    env:
+      # keep Maven repo consistent in case you ever run Maven here later
+      MAVEN_OPTS: "-Dmaven.repo.local=$HOME/.m2/repository"
 
     steps:
       - name: Download JAR artifact
@@ -107,7 +110,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no "$EC2_USER@$EC2_HOST" \
             "sudo systemctl restart $SERVICE_NAME && sudo systemctl is-active --quiet $SERVICE_NAME || (sudo journalctl -u $SERVICE_NAME -n 200 --no-pager; exit 1)"
 
-      - name: Health check (through nginx /api)
+      # Health check via nginx (you set /actuator/* to proxy to 8090)
+      - name: Health check (through nginx /actuator)
         env:
           PUBLIC_HOST: raymond-aheto.com
         run: |
