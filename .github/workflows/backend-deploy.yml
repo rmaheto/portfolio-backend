@@ -111,6 +111,6 @@ jobs:
         env:
           PUBLIC_HOST: raymond-aheto.com
         run: |
-          echo "🩺 Checking https://$PUBLIC_HOST/api/actuator/health ..."
-          curl -fsS --retry 5 --retry-delay 3 "https://$PUBLIC_HOST/api/actuator/health" \
+          echo "🩺 Checking https://$PUBLIC_HOST/actuator/health ..."
+          curl -fsS --retry 5 --retry-delay 3 "https://$PUBLIC_HOST/actuator/health" \
             | tee /dev/stderr | grep -q '"status":"UP"'
