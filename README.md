@@ -1,5 +1,11 @@
 # Personal Website Generator (Profile2Web)
 
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![Java](https://img.shields.io/badge/Java-17-blue)
+![SpringBoot](https://img.shields.io/badge/SpringBoot-3.x-brightgreen)
+![Angular](https://img.shields.io/badge/Angular-18-red)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
 A full-stack web application that allows users to instantly generate a professional personal website from profile data.
 
 ---
@@ -84,7 +90,7 @@ Enable users to quickly deploy professional personal websites with minimal setup
 
 ---
 
-## Roadmap
+## 🗺 Roadmap
 - Add multiple customizable templates.
 - Provide user authentication and profile editing.
 - Add analytics dashboard for site visits and form submissions.
