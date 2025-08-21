@@ -25,6 +25,19 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+  datasource:
+    url: jdbc:postgresql://localhost:5432/profile2web
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD.key}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 contact:
   to: rmkaheto4java@gmail.com
@@ -35,3 +48,7 @@ recaptcha:
 
 app:
   backend-base-url: http://localhost:8090
+
+jwt:
+  secret: ${ENCRYPTION_SECRET_KEY}  # Load secret from an external file
+  expiration: ${JWT_EXPIRATION:86400000}  # 24 hours in milliseconds
