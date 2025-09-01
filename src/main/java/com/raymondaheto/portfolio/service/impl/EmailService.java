@@ -1,4 +1,4 @@
-package com.raymondaheto.portfolio.service;
+package com.raymondaheto.portfolio.service.impl;
 
 import com.raymondaheto.portfolio.model.ContactRequest;
 import jakarta.annotation.Nonnull;

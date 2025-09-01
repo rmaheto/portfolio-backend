@@ -3,8 +3,9 @@ package com.raymondaheto.portfolio.controller;
 import com.raymondaheto.portfolio.dto.ApiResponse;
 import com.raymondaheto.portfolio.exception.RecaptchaException;
 import com.raymondaheto.portfolio.model.ContactRequest;
-import com.raymondaheto.portfolio.service.CaptchaService;
-import com.raymondaheto.portfolio.service.EmailService;
+import com.raymondaheto.portfolio.service.impl.AppConfigService;
+import com.raymondaheto.portfolio.service.impl.CaptchaService;
+import com.raymondaheto.portfolio.service.impl.EmailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,15 @@ public class ContactController {
 
   private final EmailService emailService;
   private final CaptchaService captcha;
+  private final AppConfigService appConfigService;
 
   @PostMapping
   @ResponseStatus(HttpStatus.ACCEPTED)
   public ApiResponse<Void> submit(@Valid @RequestBody final ContactRequest req) {
-    if (!captcha.verifyToken(req.captchaToken())) {
-      throw new RecaptchaException("RECAPTCHA_INVALID");
-    }
+
+    if(appConfigService.isRecaptchaEnabled() && !captcha.verifyToken(req.captchaToken())) {
+        throw new RecaptchaException("RECAPTCHA_INVALID");
+      }
 
     emailService.sendOwnerNotification(req);
     emailService.sendAutoReply(req);

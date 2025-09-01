@@ -1,4 +1,4 @@
-package com.raymondaheto.portfolio.service;
+package com.raymondaheto.portfolio.service.impl;
 
 import com.raymondaheto.portfolio.entity.AppUser;
 import com.raymondaheto.portfolio.model.CustomUserDetails;
