@@ -1,18 +1,15 @@
 package com.raymondaheto.portfolio.service.impl;
 
-
-import com.raymondaheto.portfolio.entity.AppConfig;
-import com.raymondaheto.portfolio.repositories.AppConfigRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AppConfigService {
-  private final AppConfigRepository configRepo;
+
+  @Value("${recaptcha.enabled:true}")
+  private boolean recaptchaEnabled;
 
   public boolean isRecaptchaEnabled() {
-    return Boolean.parseBoolean(
-        configRepo.findByKey("enable_recaptcha").map(AppConfig::getValue).orElse("false"));
+    return recaptchaEnabled;
   }
 }

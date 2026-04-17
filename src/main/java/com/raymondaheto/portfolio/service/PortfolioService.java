@@ -25,11 +25,11 @@ public class PortfolioService {
   public PortfolioResponseDto getPortfolio() {
     PortfolioProfile profile = profileRepo.findAll().stream().findFirst().orElse(null);
 
-    Map<String, List<String>> skills = new LinkedHashMap<>();
+    final Map<String, List<String>> skills = new LinkedHashMap<>();
     skillRepo.findAllByOrderByCategoryAscDisplayOrderAsc().forEach(s ->
         skills.computeIfAbsent(s.getCategory(), k -> new ArrayList<>()).add(s.getName()));
 
-    List<ExperienceDto> experience = experienceRepo.findAllByOrderByDisplayOrderAsc().stream()
+    final List<ExperienceDto> experience = experienceRepo.findAllByOrderByDisplayOrderAsc().stream()
         .map(e -> ExperienceDto.builder()
             .id(e.getId())
             .role(e.getRole())
@@ -40,7 +40,7 @@ public class PortfolioService {
             .build())
         .toList();
 
-    List<ProjectDto> projects = projectRepo.findAllByOrderByDisplayOrderAsc().stream()
+    final List<ProjectDto> projects = projectRepo.findAllByOrderByDisplayOrderAsc().stream()
         .map(p -> ProjectDto.builder()
             .id(p.getId())
             .name(p.getName())
@@ -49,7 +49,7 @@ public class PortfolioService {
             .build())
         .toList();
 
-    List<CertificationDto> certs = certRepo.findAllByOrderByDisplayOrderAsc().stream()
+    final List<CertificationDto> certs = certRepo.findAllByOrderByDisplayOrderAsc().stream()
         .map(c -> CertificationDto.builder()
             .id(c.getId())
             .name(c.getName())
@@ -58,7 +58,7 @@ public class PortfolioService {
             .build())
         .toList();
 
-    List<EducationDto> education = educationRepo.findAllByOrderByDisplayOrderAsc().stream()
+    final List<EducationDto> education = educationRepo.findAllByOrderByDisplayOrderAsc().stream()
         .map(edu -> EducationDto.builder()
             .id(edu.getId())
             .name(edu.getName())
@@ -80,8 +80,8 @@ public class PortfolioService {
   // ── Profile ───────────────────────────────────────────────────────────────
 
   @Transactional
-  public ProfileDto updateProfile(ProfileDto dto) {
-    PortfolioProfile profile = profileRepo.findAll().stream().findFirst()
+  public ProfileDto updateProfile(final ProfileDto dto) {
+    final PortfolioProfile profile = profileRepo.findAll().stream().findFirst()
         .orElse(new PortfolioProfile());
     applyProfile(profile, dto);
     return toProfileDto(profileRepo.save(profile));
@@ -94,12 +94,12 @@ public class PortfolioService {
   }
 
   @Transactional
-  public Skill addSkill(Skill skill) {
+  public Skill addSkill(final Skill skill) {
     return skillRepo.save(skill);
   }
 
   @Transactional
-  public Skill updateSkill(Long id, Skill updated) {
+  public Skill updateSkill(final Long id, final Skill updated) {
     Skill skill = skillRepo.findById(id).orElseThrow();
     skill.setCategory(updated.getCategory());
     skill.setName(updated.getName());
@@ -108,7 +108,7 @@ public class PortfolioService {
   }
 
   @Transactional
-  public void deleteSkill(Long id) {
+  public void deleteSkill(final Long id) {
     skillRepo.deleteById(id);
   }
 
@@ -119,13 +119,13 @@ public class PortfolioService {
   }
 
   @Transactional
-  public Experience addExperience(Experience exp) {
+  public Experience addExperience(final Experience exp) {
     exp.getBullets().forEach(b -> b.setExperience(exp));
     return experienceRepo.save(exp);
   }
 
   @Transactional
-  public Experience updateExperience(Long id, Experience updated) {
+  public Experience updateExperience(Long id, final Experience updated) {
     Experience exp = experienceRepo.findById(id).orElseThrow();
     exp.setRole(updated.getRole());
     exp.setCompany(updated.getCompany());
@@ -152,13 +152,13 @@ public class PortfolioService {
   }
 
   @Transactional
-  public Project addProject(Project project) {
+  public Project addProject(final Project project) {
     project.getTags().forEach(t -> t.setProject(project));
     return projectRepo.save(project);
   }
 
   @Transactional
-  public Project updateProject(Long id, Project updated) {
+  public Project updateProject(Long id, final Project updated) {
     Project project = projectRepo.findById(id).orElseThrow();
     project.setName(updated.getName());
     project.setDescription(updated.getDescription());
@@ -183,13 +183,13 @@ public class PortfolioService {
   }
 
   @Transactional
-  public Certification addCertification(Certification cert) {
+  public Certification addCertification(final Certification cert) {
     return certRepo.save(cert);
   }
 
   @Transactional
-  public Certification updateCertification(Long id, Certification updated) {
-    Certification cert = certRepo.findById(id).orElseThrow();
+  public Certification updateCertification(final Long id, final Certification updated) {
+    final Certification cert = certRepo.findById(id).orElseThrow();
     cert.setName(updated.getName());
     cert.setBadgeUrl(updated.getBadgeUrl());
     cert.setLink(updated.getLink());
@@ -209,12 +209,12 @@ public class PortfolioService {
   }
 
   @Transactional
-  public Education addEducation(Education edu) {
+  public Education addEducation(final Education edu) {
     return educationRepo.save(edu);
   }
 
   @Transactional
-  public Education updateEducation(Long id, Education updated) {
+  public Education updateEducation(final Long id, final Education updated) {
     Education edu = educationRepo.findById(id).orElseThrow();
     edu.setName(updated.getName());
     edu.setSchool(updated.getSchool());
@@ -224,13 +224,13 @@ public class PortfolioService {
   }
 
   @Transactional
-  public void deleteEducation(Long id) {
+  public void deleteEducation(final Long id) {
     educationRepo.deleteById(id);
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  private void applyProfile(PortfolioProfile p, ProfileDto dto) {
+  private void applyProfile(PortfolioProfile p, final ProfileDto dto) {
     p.setName(dto.getName());
     p.setTitle(dto.getTitle());
     p.setBlurb(dto.getBlurb());
