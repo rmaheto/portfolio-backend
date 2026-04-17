@@ -1,0 +1,24 @@
+package com.raymondaheto.portfolio.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "skill")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Skill {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  private String category;
+  private String name;
+
+  @Column(name = "display_order")
+  private int displayOrder;
+}

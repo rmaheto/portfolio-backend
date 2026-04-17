@@ -1,0 +1,49 @@
+package com.raymondaheto.portfolio.service;
+
+import com.raymondaheto.portfolio.repository.PortfolioProfileRepository;
+import java.io.IOException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+
+@Service
+@RequiredArgsConstructor
+public class ResumeService {
+
+  private final S3Client s3Client;
+  private final PortfolioProfileRepository profileRepo;
+
+  @Value("${app.aws.bucket}")
+  private String bucket;
+
+  @Value("${app.aws.resume-key-prefix}")
+  private String keyPrefix;
+
+  public String upload(MultipartFile file) throws IOException {
+    String key = keyPrefix + file.getOriginalFilename();
+
+    s3Client.putObject(
+        PutObjectRequest.builder()
+            .bucket(bucket)
+            .key(key)
+            .contentType(file.getContentType())
+            .contentDisposition("attachment; filename=\"" + file.getOriginalFilename() + "\"")
+            .build(),
+        RequestBody.fromBytes(file.getBytes()));
+
+    String url = "https://" + bucket + ".s3.amazonaws.com/" + key;
+
+    profileRepo.findAll().stream()
+        .findFirst()
+        .ifPresent(p -> {
+          p.setResumeUrl(url);
+          profileRepo.save(p);
+        });
+
+    return url;
+  }
+}
