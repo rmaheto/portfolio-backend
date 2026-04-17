@@ -24,9 +24,9 @@ public class ContactController {
   @ResponseStatus(HttpStatus.ACCEPTED)
   public ApiResponse<Void> submit(@Valid @RequestBody final ContactRequest req) {
 
-    if(appConfigService.isRecaptchaEnabled() && !captcha.verifyToken(req.captchaToken())) {
-        throw new RecaptchaException("RECAPTCHA_INVALID");
-      }
+    if (appConfigService.isRecaptchaEnabled() && !captcha.verifyToken(req.captchaToken())) {
+      throw new RecaptchaException("RECAPTCHA_INVALID");
+    }
 
     emailService.sendOwnerNotification(req);
     emailService.sendAutoReply(req);

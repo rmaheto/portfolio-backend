@@ -5,7 +5,6 @@ import com.raymondaheto.portfolio.dto.PortfolioResponseDto.*;
 import com.raymondaheto.portfolio.entity.*;
 import com.raymondaheto.portfolio.repository.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,49 +22,63 @@ public class PortfolioService {
 
   @Transactional(readOnly = true)
   public PortfolioResponseDto getPortfolio() {
-    PortfolioProfile profile = profileRepo.findAll().stream().findFirst().orElse(null);
+    final PortfolioProfile profile = profileRepo.findAll().stream().findFirst().orElse(null);
 
     final Map<String, List<String>> skills = new LinkedHashMap<>();
-    skillRepo.findAllByOrderByCategoryAscDisplayOrderAsc().forEach(s ->
-        skills.computeIfAbsent(s.getCategory(), k -> new ArrayList<>()).add(s.getName()));
+    skillRepo
+        .findAllByOrderByCategoryAscDisplayOrderAsc()
+        .forEach(
+            s -> skills.computeIfAbsent(s.getCategory(), k -> new ArrayList<>()).add(s.getName()));
 
-    final List<ExperienceDto> experience = experienceRepo.findAllByOrderByDisplayOrderAsc().stream()
-        .map(e -> ExperienceDto.builder()
-            .id(e.getId())
-            .role(e.getRole())
-            .company(e.getCompany())
-            .period(e.getPeriod())
-            .stack(e.getStack())
-            .bullets(e.getBullets().stream().map(ExperienceBullet::getText).toList())
-            .build())
-        .toList();
+    final List<ExperienceDto> experience =
+        experienceRepo.findAllByOrderByDisplayOrderAsc().stream()
+            .map(
+                e ->
+                    ExperienceDto.builder()
+                        .id(e.getId())
+                        .role(e.getRole())
+                        .company(e.getCompany())
+                        .period(e.getPeriod())
+                        .stack(e.getStack())
+                        .bullets(e.getBullets().stream().map(ExperienceBullet::getText).toList())
+                        .build())
+            .toList();
 
-    final List<ProjectDto> projects = projectRepo.findAllByOrderByDisplayOrderAsc().stream()
-        .map(p -> ProjectDto.builder()
-            .id(p.getId())
-            .name(p.getName())
-            .description(p.getDescription())
-            .tags(p.getTags().stream().map(ProjectTag::getTag).toList())
-            .build())
-        .toList();
+    final List<ProjectDto> projects =
+        projectRepo.findAllByOrderByDisplayOrderAsc().stream()
+            .map(
+                p ->
+                    ProjectDto.builder()
+                        .id(p.getId())
+                        .name(p.getName())
+                        .description(p.getDescription())
+                        .tags(p.getTags().stream().map(ProjectTag::getTag).toList())
+                        .build())
+            .toList();
 
-    final List<CertificationDto> certs = certRepo.findAllByOrderByDisplayOrderAsc().stream()
-        .map(c -> CertificationDto.builder()
-            .id(c.getId())
-            .name(c.getName())
-            .badgeUrl(c.getBadgeUrl())
-            .link(c.getLink())
-            .build())
-        .toList();
+    final List<CertificationDto> certs =
+        certRepo.findAllByOrderByDisplayOrderAsc().stream()
+            .map(
+                c ->
+                    CertificationDto.builder()
+                        .id(c.getId())
+                        .name(c.getName())
+                        .badgeUrl(c.getBadgeUrl())
+                        .link(c.getLink())
+                        .build())
+            .toList();
 
-    final List<EducationDto> education = educationRepo.findAllByOrderByDisplayOrderAsc().stream()
-        .map(edu -> EducationDto.builder()
-            .id(edu.getId())
-            .name(edu.getName())
-            .school(edu.getSchool())
-            .years(edu.getYears())
-            .build())
-        .toList();
+    final List<EducationDto> education =
+        educationRepo.findAllByOrderByDisplayOrderAsc().stream()
+            .map(
+                edu ->
+                    EducationDto.builder()
+                        .id(edu.getId())
+                        .name(edu.getName())
+                        .school(edu.getSchool())
+                        .years(edu.getYears())
+                        .build())
+            .toList();
 
     return PortfolioResponseDto.builder()
         .profile(profile == null ? null : toProfileDto(profile))
@@ -77,17 +90,13 @@ public class PortfolioService {
         .build();
   }
 
-  // ── Profile ───────────────────────────────────────────────────────────────
-
   @Transactional
   public ProfileDto updateProfile(final ProfileDto dto) {
-    final PortfolioProfile profile = profileRepo.findAll().stream().findFirst()
-        .orElse(new PortfolioProfile());
+    final PortfolioProfile profile =
+        profileRepo.findAll().stream().findFirst().orElse(new PortfolioProfile());
     applyProfile(profile, dto);
     return toProfileDto(profileRepo.save(profile));
   }
-
-  // ── Skills ────────────────────────────────────────────────────────────────
 
   public List<Skill> getSkills() {
     return skillRepo.findAllByOrderByCategoryAscDisplayOrderAsc();
@@ -100,7 +109,7 @@ public class PortfolioService {
 
   @Transactional
   public Skill updateSkill(final Long id, final Skill updated) {
-    Skill skill = skillRepo.findById(id).orElseThrow();
+    final Skill skill = skillRepo.findById(id).orElseThrow();
     skill.setCategory(updated.getCategory());
     skill.setName(updated.getName());
     skill.setDisplayOrder(updated.getDisplayOrder());
@@ -111,8 +120,6 @@ public class PortfolioService {
   public void deleteSkill(final Long id) {
     skillRepo.deleteById(id);
   }
-
-  // ── Experience ────────────────────────────────────────────────────────────
 
   public List<Experience> getExperiences() {
     return experienceRepo.findAllByOrderByDisplayOrderAsc();
@@ -125,27 +132,28 @@ public class PortfolioService {
   }
 
   @Transactional
-  public Experience updateExperience(Long id, final Experience updated) {
-    Experience exp = experienceRepo.findById(id).orElseThrow();
+  public Experience updateExperience(final Long id, final Experience updated) {
+    final Experience exp = experienceRepo.findById(id).orElseThrow();
     exp.setRole(updated.getRole());
     exp.setCompany(updated.getCompany());
     exp.setPeriod(updated.getPeriod());
     exp.setStack(updated.getStack());
     exp.setDisplayOrder(updated.getDisplayOrder());
     exp.getBullets().clear();
-    updated.getBullets().forEach(b -> {
-      b.setExperience(exp);
-      exp.getBullets().add(b);
-    });
+    updated
+        .getBullets()
+        .forEach(
+            b -> {
+              b.setExperience(exp);
+              exp.getBullets().add(b);
+            });
     return experienceRepo.save(exp);
   }
 
   @Transactional
-  public void deleteExperience(Long id) {
+  public void deleteExperience(final Long id) {
     experienceRepo.deleteById(id);
   }
-
-  // ── Projects ──────────────────────────────────────────────────────────────
 
   public List<Project> getProjects() {
     return projectRepo.findAllByOrderByDisplayOrderAsc();
@@ -158,25 +166,26 @@ public class PortfolioService {
   }
 
   @Transactional
-  public Project updateProject(Long id, final Project updated) {
-    Project project = projectRepo.findById(id).orElseThrow();
+  public Project updateProject(final Long id, final Project updated) {
+    final Project project = projectRepo.findById(id).orElseThrow();
     project.setName(updated.getName());
     project.setDescription(updated.getDescription());
     project.setDisplayOrder(updated.getDisplayOrder());
     project.getTags().clear();
-    updated.getTags().forEach(t -> {
-      t.setProject(project);
-      project.getTags().add(t);
-    });
+    updated
+        .getTags()
+        .forEach(
+            t -> {
+              t.setProject(project);
+              project.getTags().add(t);
+            });
     return projectRepo.save(project);
   }
 
   @Transactional
-  public void deleteProject(Long id) {
+  public void deleteProject(final Long id) {
     projectRepo.deleteById(id);
   }
-
-  // ── Certifications ────────────────────────────────────────────────────────
 
   public List<Certification> getCertifications() {
     return certRepo.findAllByOrderByDisplayOrderAsc();
@@ -198,11 +207,9 @@ public class PortfolioService {
   }
 
   @Transactional
-  public void deleteCertification(Long id) {
+  public void deleteCertification(final Long id) {
     certRepo.deleteById(id);
   }
-
-  // ── Education ─────────────────────────────────────────────────────────────
 
   public List<Education> getEducation() {
     return educationRepo.findAllByOrderByDisplayOrderAsc();
@@ -215,7 +222,7 @@ public class PortfolioService {
 
   @Transactional
   public Education updateEducation(final Long id, final Education updated) {
-    Education edu = educationRepo.findById(id).orElseThrow();
+    final Education edu = educationRepo.findById(id).orElseThrow();
     edu.setName(updated.getName());
     edu.setSchool(updated.getSchool());
     edu.setYears(updated.getYears());
@@ -228,9 +235,7 @@ public class PortfolioService {
     educationRepo.deleteById(id);
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
-  private void applyProfile(PortfolioProfile p, final ProfileDto dto) {
+  private void applyProfile(final PortfolioProfile p, final ProfileDto dto) {
     p.setName(dto.getName());
     p.setTitle(dto.getTitle());
     p.setBlurb(dto.getBlurb());
@@ -254,7 +259,7 @@ public class PortfolioService {
     p.setInstagramDisplay(dto.getInstagramDisplay());
   }
 
-  private ProfileDto toProfileDto(PortfolioProfile p) {
+  private ProfileDto toProfileDto(final PortfolioProfile p) {
     return ProfileDto.builder()
         .id(p.getId())
         .name(p.getName())

@@ -19,7 +19,7 @@ public class Skill {
   @Column(nullable = false, length = 50)
   private String category;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false)
   private String name;
 
   @Column(name = "display_order")

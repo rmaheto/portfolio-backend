@@ -23,8 +23,8 @@ public class ResumeService {
   @Value("${app.aws.resume-key-prefix}")
   private String keyPrefix;
 
-  public String upload(MultipartFile file) throws IOException {
-    String key = keyPrefix + file.getOriginalFilename();
+  public String upload(final MultipartFile file) throws IOException {
+    final String key = keyPrefix + file.getOriginalFilename();
 
     s3Client.putObject(
         PutObjectRequest.builder()
@@ -35,14 +35,15 @@ public class ResumeService {
             .build(),
         RequestBody.fromBytes(file.getBytes()));
 
-    String url = "https://" + bucket + ".s3.amazonaws.com/" + key;
+    final String url = "https://" + bucket + ".s3.amazonaws.com/" + key;
 
     profileRepo.findAll().stream()
         .findFirst()
-        .ifPresent(p -> {
-          p.setResumeUrl(url);
-          profileRepo.save(p);
-        });
+        .ifPresent(
+            p -> {
+              p.setResumeUrl(url);
+              profileRepo.save(p);
+            });
 
     return url;
   }

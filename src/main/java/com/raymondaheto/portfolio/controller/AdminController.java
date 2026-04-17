@@ -19,14 +19,10 @@ public class AdminController {
   private final PortfolioService portfolioService;
   private final ResumeService resumeService;
 
-  // ── Profile ───────────────────────────────────────────────────────────────
-
   @PutMapping("/profile")
-  public ResponseEntity<ProfileDto> updateProfile(@RequestBody ProfileDto dto) {
+  public ResponseEntity<ProfileDto> updateProfile(@RequestBody final ProfileDto dto) {
     return ResponseEntity.ok(portfolioService.updateProfile(dto));
   }
-
-  // ── Skills ────────────────────────────────────────────────────────────────
 
   @GetMapping("/skills")
   public ResponseEntity<List<Skill>> getSkills() {
@@ -34,22 +30,21 @@ public class AdminController {
   }
 
   @PostMapping("/skills")
-  public ResponseEntity<Skill> addSkill(@RequestBody Skill skill) {
+  public ResponseEntity<Skill> addSkill(@RequestBody final Skill skill) {
     return ResponseEntity.ok(portfolioService.addSkill(skill));
   }
 
   @PutMapping("/skills/{id}")
-  public ResponseEntity<Skill> updateSkill(@PathVariable Long id, @RequestBody Skill skill) {
+  public ResponseEntity<Skill> updateSkill(
+      @PathVariable final Long id, @RequestBody final Skill skill) {
     return ResponseEntity.ok(portfolioService.updateSkill(id, skill));
   }
 
   @DeleteMapping("/skills/{id}")
-  public ResponseEntity<Void> deleteSkill(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteSkill(@PathVariable final Long id) {
     portfolioService.deleteSkill(id);
     return ResponseEntity.noContent().build();
   }
-
-  // ── Experience ────────────────────────────────────────────────────────────
 
   @GetMapping("/experience")
   public ResponseEntity<List<Experience>> getExperience() {
@@ -57,23 +52,21 @@ public class AdminController {
   }
 
   @PostMapping("/experience")
-  public ResponseEntity<Experience> addExperience(@RequestBody Experience exp) {
+  public ResponseEntity<Experience> addExperience(@RequestBody final Experience exp) {
     return ResponseEntity.ok(portfolioService.addExperience(exp));
   }
 
   @PutMapping("/experience/{id}")
   public ResponseEntity<Experience> updateExperience(
-      @PathVariable Long id, @RequestBody Experience exp) {
+      @PathVariable final Long id, @RequestBody final Experience exp) {
     return ResponseEntity.ok(portfolioService.updateExperience(id, exp));
   }
 
   @DeleteMapping("/experience/{id}")
-  public ResponseEntity<Void> deleteExperience(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteExperience(@PathVariable final Long id) {
     portfolioService.deleteExperience(id);
     return ResponseEntity.noContent().build();
   }
-
-  // ── Projects ──────────────────────────────────────────────────────────────
 
   @GetMapping("/projects")
   public ResponseEntity<List<Project>> getProjects() {
@@ -81,23 +74,21 @@ public class AdminController {
   }
 
   @PostMapping("/projects")
-  public ResponseEntity<Project> addProject(@RequestBody Project project) {
+  public ResponseEntity<Project> addProject(@RequestBody final Project project) {
     return ResponseEntity.ok(portfolioService.addProject(project));
   }
 
   @PutMapping("/projects/{id}")
   public ResponseEntity<Project> updateProject(
-      @PathVariable Long id, @RequestBody Project project) {
+      @PathVariable final Long id, @RequestBody final Project project) {
     return ResponseEntity.ok(portfolioService.updateProject(id, project));
   }
 
   @DeleteMapping("/projects/{id}")
-  public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteProject(@PathVariable final Long id) {
     portfolioService.deleteProject(id);
     return ResponseEntity.noContent().build();
   }
-
-  // ── Certifications ────────────────────────────────────────────────────────
 
   @GetMapping("/certifications")
   public ResponseEntity<List<Certification>> getCertifications() {
@@ -105,23 +96,21 @@ public class AdminController {
   }
 
   @PostMapping("/certifications")
-  public ResponseEntity<Certification> addCertification(@RequestBody Certification cert) {
+  public ResponseEntity<Certification> addCertification(@RequestBody final Certification cert) {
     return ResponseEntity.ok(portfolioService.addCertification(cert));
   }
 
   @PutMapping("/certifications/{id}")
   public ResponseEntity<Certification> updateCertification(
-      @PathVariable Long id, @RequestBody Certification cert) {
+      @PathVariable final Long id, @RequestBody final Certification cert) {
     return ResponseEntity.ok(portfolioService.updateCertification(id, cert));
   }
 
   @DeleteMapping("/certifications/{id}")
-  public ResponseEntity<Void> deleteCertification(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteCertification(@PathVariable final Long id) {
     portfolioService.deleteCertification(id);
     return ResponseEntity.noContent().build();
   }
-
-  // ── Education ─────────────────────────────────────────────────────────────
 
   @GetMapping("/education")
   public ResponseEntity<List<Education>> getEducation() {
@@ -129,28 +118,26 @@ public class AdminController {
   }
 
   @PostMapping("/education")
-  public ResponseEntity<Education> addEducation(@RequestBody Education edu) {
+  public ResponseEntity<Education> addEducation(@RequestBody final Education edu) {
     return ResponseEntity.ok(portfolioService.addEducation(edu));
   }
 
   @PutMapping("/education/{id}")
   public ResponseEntity<Education> updateEducation(
-      @PathVariable Long id, @RequestBody Education edu) {
+      @PathVariable final Long id, @RequestBody final Education edu) {
     return ResponseEntity.ok(portfolioService.updateEducation(id, edu));
   }
 
   @DeleteMapping("/education/{id}")
-  public ResponseEntity<Void> deleteEducation(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteEducation(@PathVariable final Long id) {
     portfolioService.deleteEducation(id);
     return ResponseEntity.noContent().build();
   }
 
-  // ── Resume ────────────────────────────────────────────────────────────────
-
   @PostMapping("/resume")
-  public ResponseEntity<String> uploadResume(@RequestParam("file") MultipartFile file)
+  public ResponseEntity<String> uploadResume(@RequestParam("file") final MultipartFile file)
       throws IOException {
-    String url = resumeService.upload(file);
+    final String url = resumeService.upload(file);
     return ResponseEntity.ok(url);
   }
 }
