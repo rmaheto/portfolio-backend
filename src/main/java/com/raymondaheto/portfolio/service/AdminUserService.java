@@ -25,7 +25,10 @@ public class AdminUserService {
 
   @PostConstruct
   public void seedAdminUser() {
-    log.info("[AdminUserService] Seeding admin — username='{}' passwordLength={}", adminUsername, adminPassword == null ? 0 : adminPassword.length());
+    log.info(
+        "[AdminUserService] Seeding admin — username='{}' passwordLength={}",
+        adminUsername,
+        adminPassword == null ? 0 : adminPassword.length());
     if (adminUserRepository.findByUsername(adminUsername).isEmpty()) {
       adminUserRepository.save(
           AdminUser.builder()
@@ -38,18 +41,20 @@ public class AdminUserService {
     }
   }
 
-  public boolean authenticate(String username, String rawPassword) {
+  public boolean authenticate(final String username, final String rawPassword) {
     log.info("[AdminUserService] authenticate called — username='{}'", username);
     return adminUserRepository
         .findByUsername(username)
-        .map(user -> {
-          boolean matches = passwordEncoder.matches(rawPassword, user.getPasswordHash());
-          log.info("[AdminUserService] BCrypt matches={}", matches);
-          return matches;
-        })
-        .orElseGet(() -> {
-          log.warn("[AdminUserService] No user found with username='{}'", username);
-          return false;
-        });
+        .map(
+            user -> {
+              final boolean matches = passwordEncoder.matches(rawPassword, user.getPasswordHash());
+              log.info("[AdminUserService] BCrypt matches={}", matches);
+              return matches;
+            })
+        .orElseGet(
+            () -> {
+              log.warn("[AdminUserService] No user found with username='{}'", username);
+              return false;
+            });
   }
 }

@@ -22,8 +22,6 @@ public class Experience {
   private String role;
   private String company;
   private String period;
-
-  @Column(columnDefinition = "TEXT")
   private String stack;
 
   @Column(name = "display_order")

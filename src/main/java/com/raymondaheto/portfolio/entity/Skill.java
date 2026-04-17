@@ -16,7 +16,10 @@ public class Skill {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(nullable = false, length = 50)
   private String category;
+
+  @Column(nullable = false)
   private String name;
 
   @Column(name = "display_order")

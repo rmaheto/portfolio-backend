@@ -19,11 +19,11 @@ public class AuthController {
   private final JwtService jwtService;
 
   @PostMapping("/login")
-  public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest req) {
+  public ResponseEntity<LoginResponse> login(@Valid @RequestBody final LoginRequest req) {
     if (!adminUserService.authenticate(req.username(), req.password())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-    String token = jwtService.generate(req.username());
+    final String token = jwtService.generate(req.username());
     return ResponseEntity.ok(new LoginResponse(token, jwtService.expiresAt(token)));
   }
 }
