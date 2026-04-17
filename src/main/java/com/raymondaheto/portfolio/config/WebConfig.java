@@ -22,7 +22,7 @@ public class WebConfig {
                 "https://raymond-aheto.com",
                 "https://www.raymond-aheto.com",
                 "https://api.raymondaheto.com")
-            .allowedMethods("POST", "OPTIONS")
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*")
             .exposedHeaders("Authorization", "Content-Type")
             .allowCredentials(true);

@@ -19,7 +19,7 @@ public class CustomCorsConfiguration implements CorsConfigurationSource {
             "https://raymond-aheto.com",
             "https://www.raymond-aheto.com",
             "https://api.raymondaheto.com"));
-    config.setAllowedMethods(List.of("POST", "OPTIONS"));
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true);
     config.setExposedHeaders(List.of("Authorization", "Content-Type"));
