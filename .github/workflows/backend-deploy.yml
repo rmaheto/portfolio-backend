@@ -108,6 +108,9 @@ jobs:
         env:
           PUBLIC_HOST: raymond-aheto.com
         run: |
+          echo "🩺 Waiting for Spring Boot to start..."
+          sleep 25
           echo "🩺 Checking https://$PUBLIC_HOST/actuator/health ..."
-          curl -fsS --retry 5 --retry-delay 3 "https://$PUBLIC_HOST/actuator/health" \
+          curl -fsS --retry 12 --retry-delay 10 --retry-all-errors \
+            "https://$PUBLIC_HOST/actuator/health" \
             | tee /dev/stderr | grep -q '"status":"UP"'
