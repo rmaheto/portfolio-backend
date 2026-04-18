@@ -6,6 +6,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,17 @@ public class EmailService {
     final String html = templateEngine.process("email-user", ctx);
 
     sendHtml(req.email(), subject, html);
+  }
+
+  public void sendTwoFactorCode(final String toEmail, final String code) {
+    final SimpleMailMessage msg = new SimpleMailMessage();
+    msg.setTo(toEmail);
+    msg.setSubject("Your Admin Login Code");
+    msg.setText(
+        "Your one-time login code is: "
+            + code
+            + "\n\nThis code expires in 10 minutes.\nDo not share it with anyone.");
+    mailSender.send(msg);
   }
 
   private void sendHtml(@Nonnull final String to, final String subject, final String html) {

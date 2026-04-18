@@ -23,22 +23,36 @@ public class AdminUserService {
   @Value("${app.admin.password}")
   private String adminPassword;
 
+  @Value("${app.admin.email:}")
+  private String adminEmail;
+
   @PostConstruct
   public void seedAdminUser() {
     log.info(
         "[AdminUserService] Seeding admin — username='{}' passwordLength={}",
         adminUsername,
         adminPassword == null ? 0 : adminPassword.length());
-    if (adminUserRepository.findByUsername(adminUsername).isEmpty()) {
-      adminUserRepository.save(
-          AdminUser.builder()
-              .username(adminUsername)
-              .passwordHash(passwordEncoder.encode(adminPassword))
-              .build());
-      log.info("[AdminUserService] Admin user created.");
-    } else {
-      log.info("[AdminUserService] Admin user already exists, skipping seed.");
-    }
+
+    adminUserRepository
+        .findByUsername(adminUsername)
+        .ifPresentOrElse(
+            user -> {
+              log.info("[AdminUserService] Admin user already exists.");
+              if (user.getEmail() == null && adminEmail != null && !adminEmail.isBlank()) {
+                user.setEmail(adminEmail);
+                adminUserRepository.save(user);
+                log.info("[AdminUserService] Updated admin email.");
+              }
+            },
+            () -> {
+              adminUserRepository.save(
+                  AdminUser.builder()
+                      .username(adminUsername)
+                      .passwordHash(passwordEncoder.encode(adminPassword))
+                      .email(adminEmail.isBlank() ? null : adminEmail)
+                      .build());
+              log.info("[AdminUserService] Admin user created.");
+            });
   }
 
   public boolean authenticate(final String username, final String rawPassword) {
@@ -56,5 +70,9 @@ public class AdminUserService {
               log.warn("[AdminUserService] No user found with username='{}'", username);
               return false;
             });
+  }
+
+  public String getAdminEmail(final String username) {
+    return adminUserRepository.findByUsername(username).map(AdminUser::getEmail).orElse(null);
   }
 }

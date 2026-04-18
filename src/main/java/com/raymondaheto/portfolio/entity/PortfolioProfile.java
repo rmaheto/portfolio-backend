@@ -31,6 +31,9 @@ public class PortfolioProfile {
   @Column(name = "resume_url")
   private String resumeUrl;
 
+  @Column(name = "resume_file_name")
+  private String resumeFileName;
+
   private String location;
 
   @Column(name = "contact_intro", columnDefinition = "TEXT")
