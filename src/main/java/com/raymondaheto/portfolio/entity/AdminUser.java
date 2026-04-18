@@ -21,4 +21,6 @@ public class AdminUser {
 
   @Column(name = "password_hash", nullable = false)
   private String passwordHash;
+
+  @Column private String email;
 }

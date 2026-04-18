@@ -2,6 +2,7 @@ package com.raymondaheto.portfolio.controller;
 
 import com.raymondaheto.portfolio.dto.PortfolioResponseDto.*;
 import com.raymondaheto.portfolio.entity.*;
+import com.raymondaheto.portfolio.service.AvatarService;
 import com.raymondaheto.portfolio.service.PortfolioService;
 import com.raymondaheto.portfolio.service.ResumeService;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class AdminController {
 
   private final PortfolioService portfolioService;
   private final ResumeService resumeService;
+  private final AvatarService avatarService;
 
   @PutMapping("/profile")
   public ResponseEntity<ProfileDto> updateProfile(@RequestBody final ProfileDto dto) {
@@ -138,6 +140,13 @@ public class AdminController {
   public ResponseEntity<String> uploadResume(@RequestParam("file") final MultipartFile file)
       throws IOException {
     final String url = resumeService.upload(file);
+    return ResponseEntity.ok(url);
+  }
+
+  @PostMapping("/avatar")
+  public ResponseEntity<String> uploadAvatar(@RequestParam("file") final MultipartFile file)
+      throws IOException {
+    final String url = avatarService.upload(file);
     return ResponseEntity.ok(url);
   }
 }

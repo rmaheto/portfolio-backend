@@ -59,9 +59,13 @@ app:
     secret: ${JWT_SECRET.key}
     expiration-ms: 86400000
   aws:
-    bucket: portfolio
+    bucket: raymond-portfolio
     region: us-east-1
     resume-key-prefix: resumes/
+    access-key-id: ${AWS_ACCESS_KEY_ID:}
+    secret-access-key: ${AWS_SECRET_ACCESS_KEY.key:}
+    cloudfront-base-url: ${AWS_CLOUDFRONT_BASE_URL:}
   admin:
     username: ${ADMIN_USERNAME}
     password: ${ADMIN_PASSWORD.key}
+    email: ${ADMIN_EMAIL:}
