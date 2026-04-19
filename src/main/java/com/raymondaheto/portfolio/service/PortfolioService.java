@@ -257,6 +257,7 @@ public class PortfolioService {
     p.setXDisplay(dto.getXDisplay());
     p.setInstagram(dto.getInstagram());
     p.setInstagramDisplay(dto.getInstagramDisplay());
+    p.setActiveTheme(dto.getActiveTheme() != null ? dto.getActiveTheme() : "modern");
   }
 
   private ProfileDto toProfileDto(final PortfolioProfile p) {
@@ -283,6 +284,7 @@ public class PortfolioService {
         .xDisplay(p.getXDisplay())
         .instagram(p.getInstagram())
         .instagramDisplay(p.getInstagramDisplay())
+        .activeTheme(p.getActiveTheme() != null ? p.getActiveTheme() : "modern")
         .build();
   }
 }
