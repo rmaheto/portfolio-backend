@@ -69,4 +69,7 @@ public class PortfolioProfile {
 
   @Column(name = "instagram_display")
   private String instagramDisplay;
+
+  @Column(name = "active_theme")
+  private String activeTheme = "modern";
 }

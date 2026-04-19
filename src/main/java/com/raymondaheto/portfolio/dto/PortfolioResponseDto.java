@@ -43,6 +43,7 @@ public class PortfolioResponseDto {
     private String xDisplay;
     private String instagram;
     private String instagramDisplay;
+    private String activeTheme;
   }
 
   @Data
